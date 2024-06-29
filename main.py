@@ -56,31 +56,31 @@ res = requests.get('https://onemillioncheckboxes.com/api/initial-state', headers
 bitset = BitSet(res.get('full_state'), res.get('count'))
 
 
-def uncheck_100():
+def check_100():
     while True:
         for i in range(0, 600):
             if bitset.get(i):
                 time.sleep(SLEEP_TIME)
                 sio.emit('toggle_bit', {'index': i})
-                bitset.set(i, False)
+                bitset.set(i, True)
                 print('first 100 at bay',  i)
 
 
-def uncheck_everything():
+def check_everything():
     while True:
         for i in range(100000, 999999):
             if bitset.get(i):
                 time.sleep(SLEEP_TIME)
                 sio.emit('toggle_bit', {'index': i})
-                bitset.set(i, False)
-                print('unchecked box', i)
+                bitset.set(i, True)
+                print('checked box', i)
         print('done')
 
 
 @sio.event
 def connect():
-    threading.Thread(target=uncheck_100).start()
-    threading.Thread(target=uncheck_everything).start()
+    threading.Thread(target=check_100).start()
+    threading.Thread(target=check_everything).start()
 
 
 @sio.event
